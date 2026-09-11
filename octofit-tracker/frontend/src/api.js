@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react'
 
-const codespaceName = import.meta.env.VITE_CODESPACE_NAME
-const apiOrigin = codespaceName
-  ? `https://${codespaceName}-8000.app.github.dev`
-  : 'http://localhost:8000'
-
 function getItems(payload, collectionName) {
   if (Array.isArray(payload)) return payload
   if (!payload || typeof payload !== 'object') return []
@@ -24,7 +19,7 @@ export function useCollection(endpoint, collectionName) {
 
     async function loadCollection() {
       try {
-        const response = await fetch(`${apiOrigin}${endpoint}`, { signal: controller.signal })
+        const response = await fetch(endpoint, { signal: controller.signal })
         if (!response.ok) throw new Error(`Unable to load ${collectionName}`)
         const payload = await response.json()
         setState({ items: getItems(payload, collectionName), loading: false, error: '' })
